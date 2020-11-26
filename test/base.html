@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>基础原理</title>
+  </head>
+  <body>
+    <script>
+      /*
+      柯里化函数:链式调用
+      项目实际运用：比如一个数字的正则校验，很多地方都用到了，就先传一个正则然后保存。然后其它哪些地方需要用到就调用刚刚保存的。
+      */
+      function add() {
+        let args = [...arguments]; //存储第一次调用的入参
+        let proxy = () => {
+          args.push(...arguments); //每次回调都存一次
+          return proxy;
+        };
+        proxy.toString = () => {
+          return args.reduce((result, item) => {
+            return result + item;
+          });
+        };
+        return proxy;
+      }
+      /*
+      优先级一样的是从右到左运算，优先级不一样的时候就是先算优先级高的但是成员访问运算优先级很高(需要了解运算优先级)。
+      不管是栈内存还是堆内存都是从计算机中分配出来的，开辟得越多电脑性能越慢，性能优化：内存优化。
+      */
+      //练习题目
+      var a = { n: 1 };
+      var b = a;
+      a.x = a = { n: 2 };
+      console.log(a.x);
+      console.log(b);
+
+      /*
+      js在浏览器里面执行原理
+        第一步浏览器会开辟一个内存（电脑内存条）给js来执行（ECstack执行环境栈）
+        第二步js会生成一个全局上下文（EC[G]），全局上下文里面首先会有全局变量对象（VO[G]）。完成过后整个全局上下文就会进栈（执行环境栈）
+
+        函数创建，单独开辟一个堆内存，函数堆内存里面存储的是函数体中的“代码字符串”
+        函数创建时就声明了它的作用域[scope]，也就是它所在的上下文环境
+        把16进制的地址存放到栈中，供函数名等变量关联引用
+        函数执行的目的是把存在堆里面的字符串变为代码形式执行，函数执行会形成一个全新的私有的执行上下文，也有存放自己变量的对象，此对象被称为活动对象（AO）
+        函数：初始化作用域链、初始化this、初始化arguments、形参赋值（是函数的私有变量）、变量提升、代码执行
+        执行函数：1、形成一个全新的、私有的上下文 （EC）
+                2、当前私有上下文中有一个存放本上下文内声明的变量地方（AO）私有变量对象，这里的变量是当前上下文声明的变量、行参变量
+                3、进栈执行
+                4、代码执行之前还有很多事情要处理
+                    1）初始化作用域链[scope-chain] <当前自己上下文，上级上下文创建函数时形成的作用域> ->当前函数的上级上下文是创建函数所在的上下文（作用域）
+      */
+      //练习题
+      var x = [12, 23];
+      function fn(y) {
+        y[0] = 100;
+        y = [100];
+        y[1] = 200;
+        console.log(y); //[100,200]
+      }
+      fn(x);
+      console.log(x); //[100,23]
+
+      function Foo() {
+        this.a = 1;
+        return {
+          a: 4,
+          b: 5,
+        };
+      }
+      Foo.prototype.a = 6;
+      Foo.prototype.b = 7;
+      Foo.prototype.c = 8;
+      var o = new Foo();
+      console.log(o.a);
+      console.log(o.b);
+      console.log(o.c);
+      //   function Foo() {
+      //     getName = function () {
+      //       console.log(1);
+      //     };
+      //     return this;
+      //   }
+      //   Foo.getName = function () {
+      //     console.log(2);
+      //   };
+      //   Foo.prototype.getName = function () {
+      //     console.log(3);
+      //   };
+      //   var getName = function () {
+      //     console.log(4);
+      //   };
+      //   function getName() {
+      //     console.log(5);
+      //   }
+      //   Foo.getName(); //2
+      //   getName(); //4
+      //   Foo().getName(); //1
+      //   getName(); //1
+      //   new Foo.getName(); //2
+      //   new Foo().getName(); //3
+      //   new new Foo().getName(); //3
+      //   Function.prototype.a = () => alert(1);
+      //   Object.prototype.b = () => alert(2);
+      //   function A() {}
+      //   var a = new A();
+      //   a.a();
+      //   //   console.dir(a);
+      //   //   console.log("aaa", a.a);
+      //   A.a();
+      //   a.b();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>加号拼接</title>
+  </head>
+  <body>
+    <script>
+      //加号运算和拼接
+      let n = "10",
+        m = 10;
+      console.log(10 + n); // 1010  "+"有一边出现字符串「前提：有两边」 则是字符串拼接‘1010’
+      console.log(+n); // 10 “+”只有一边，把字符串转为数字 10
+      console.log(++n); // 11 “++”和上面一样的，只是会自身累加1
+      // i = i+1 i+=1 这两者一样
+      // ++i i++ 大部分情况和上面一致，如果i是字符串则和上面不一致「上面会处理成字符串拼接，下面是数学累加」
+
+      /*如果“+”两边，有一边是对象，可能会是字符串拼接
+        *例如： 10+{} / 10+{name:11} -> '10[object object]'
+                10+[10,20,30] -> '1010,20,30'
+            特殊：
+                10+new Number(10) -> 20 因为对象没参与运算，浏览器认为对象只是个代码块，只计算了+10
+                {}+10/{name:10}+10 -> 10
+                    但是如果是下面情况还是字符串拼接,因为从语法分析来讲对象参与运算了，就会先把对象转成字符串
+                        （{}+10）-> '[object object]10'
+                        let x = {} + 10;  x -> '[object object]10'
+        */
+      console.log({} + m); //[object object]10
+      let res = {} + m;
+      console.log(res); //[object object]10
+      console.log(m + {}); //10[object object]
+      console.log(m + new Number(10)); //20
+      console.log(m + { name: 10 }); //10[object object]
+      /*
+        底层原理机制：对象在做数学运算的时候
+            检测对象的 Symbol.toPrimitive 这个属性值，如果有则基于这个值进行计算，如果没有
+            检测对象的 valueOf() 这个值「原始值：基本类型值」，如果有则基于这个值进行计算，如果没有
+            就获取对象的 toString() 把其变成字符串，遇到了“+”就是字符串拼接
+        */
+      let obj = {
+        [Symbol.toPrimitive](hint) {
+          console.log("hint", hint);
+          //hint是浏览器识别出来的类型，有三个值 string/bumber/default
+          if (hint === "string") {
+            return "holle";
+          }
+          if (hint === "number") {
+            return 2;
+          }
+          return null;
+        },
+      };
+      console.log(+obj);
+      console.log(`${obj}`);
+      console.log(obj + "10");
+    </script>
+  </body>
+</html>

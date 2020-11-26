@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      /*js的几种继承方式*/
+      var _self;
+      function Person(name) {
+        _self = this;
+        this.name = name || "parent";
+        console.log("/////", this);
+        this.callName = function () {
+          console.log("this", this);
+          console.log("--name", this.name);
+        };
+      }
+      //原型链继承
+      /**
+       * JavaScript实现继承的基本思想：通过原型将一个引用类型继承另一个引用类型的属性和方法
+       * 当创建一个函数(普通函数，Person构造函数)时，内部有一个prototype属性（这是一个指针），指向它的原型对象（Person.prototype），原型对象本质也是一个对象
+       * 而在默认情况下，Person.prototype又会作为Object的实例对象
+       * 而实例对象上有一个__proto__会指向原型对象，因此 Person.prototype.__proto__ === Object.prototype 会返回true
+       * 而Object.prototype的原型对象会指向null，即 Object.prototype.__proto__ === null 返回true
+       * **/
+      function Proto(name, age) {
+        this.name = name;
+        this.age = age;
+      }
+      Proto.prototype = new Person();
+      // Proto.prototype.name = 'proto';
+      // Proto.prototype.age = '18';
+      Proto.prototype.handlAge = function () {
+        console.log("--age", this.age);
+      };
+      let protoFn = new Proto("proto", 18);
+      let testFn = new Proto("test", 17);
+      console.log(protoFn.name);
+      testFn.callName();
+      protoFn.handlAge();
+      console.log(
+        "这里Proto构造函数的原型对象是Person实例",
+        Proto.prototype.__proto__ === Person.prototype
+      );
+      /**
+       * 特点：
+       * 1、非常纯粹的继承关系，实例是子类的实例，也是父类的实例
+       * 2、父类新增原型方法/原型属性，子类都能访问到
+       * 3、简单，易于实现
+       * 缺点：
+       * 1、要想为子类新增属性和方法，必须要在new Animal()这样的语句之后执行，不能放到构造器中
+       * 2、无法实现多继承
+       * 3、来自原型对象的所有属性被所有实例共享
+       * 4、创建子类实例时，无法向父类构造函数传参
+       * **/
+
+      //构造函数继承
+      /**
+       * 使用父类的构造函数来增强子类实例，等于是复制父类的实例属性给子类（没用到原型）
+       * **/
+      function Fncaret() {}
+    </script>
+  </body>
+</html>

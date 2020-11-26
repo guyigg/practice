@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style type="text/css">
+      ul {
+        width: 200px;
+        height: 100px;
+        /* font-size: 0px; */
+      }
+      li {
+        width: 500px;
+        height: 50px;
+        background: green;
+        display: inline-block;
+        /* margin: 0; */
+        /* padding: 0; */
+        /* font-size: 12px; */
+        /* margin-left: -3px; */
+        /* padding-left: -3px; */
+        /* font-size: 0px; */
+        /* font-size: 0; */
+        /* -webkit-text-size-adjust:none; */
+        /* margin-right: -3px; */
+      }
+      /* p{
+        font-size: 12px;
+    } */
+      .flex-box {
+        border: 1px solid red;
+      }
+      .flex-content p {
+        /* width: 800px; */
+        border: 1px solid pink;
+        background: chartreuse;
+      }
+      .flex-content {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+        align-items: center;
+        flex-direction: column;
+        height: 100%;
+      }
+      .first {
+        height: 50px;
+      }
+      .second {
+        /* height: 50px; */
+        flex: 1;
+      }
+      /* .third{
+        height: 200px;
+        padding-top: 20px;
+    }
+    .fourth{
+        height: 400px;
+    } */
+    </style>
+  </head>
+  <body>
+    <!-- <div>test</div>
+    <table>
+        <thead>
+            <th scope="colgroup">1</th>
+            <td scope="col">2</td>
+        </thead>
+    </table>
+    <hr />
+    <ul>
+        <li class="test" myAttr="atttr"></li>
+        <li></li>
+    </ul> -->
+    <div class="flex-box">
+      <!-- <p>百度搜索</p> -->
+      <div class="flex-content">
+        <p class="first">第一个</p>
+        <p class="second">第二个</p>
+        <!-- <p class="third">第三个</p>
+            <p class="fourth">第四个</p> -->
+      </div>
+    </div>
+    <!-- <div>
+        重庆
+    </div> -->
+  </body>
+  <script>
+    // const arr1 = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'D1', 'D2']
+    // const arr2 = ['A', 'B', 'C', 'D']
+    // const arr3 = arr1.concat(arr2)
+    // let arr4 = '';
+    // for(let i=0; i< arr3.length-1; i++){
+    //     for(let j=0; j<arr3.length-1; j++){
+    //         if(arr3[j] > arr3[j+1]){
+    //             arr4 = arr3[j];
+    //             arr3[j]=arr3[j+1];
+    //             arr3[j+1]=arr4;
+    //             // console.log('----', i,j)
+    //         }
+    //     }
+    // }
+    // console.log('////',arr3);
+    // const d = 'B'
+    // console.log('code', d.charCodeAt(1).toString(16))
+    // var b = 10;
+    // (function b(b){
+    //     // console.log(b);
+    //     b = 20;
+    //     console.log(b);
+    // })(b);
+
+    // var a = '';
+    // if(a == 1 && a == 2 && a == 3){
+    //     console.log(1);
+    // }
+    // window.onload = function(){
+    //     // console.log('111',arr3)
+    //     // for(let i=0; i<arr3.length; i++){
+    //     //     for(let j=1; j<arr3.length; j++){
+
+    //     //     }
+    //     // }
+    // }
+    // let wrapper = document.createElement(&#39;div&#39;)
+  </script>
+</html>

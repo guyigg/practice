@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>XMLHttpRequest</title>
+  </head>
+  <body>
+    <script>
+      let handleEvent = function (ev) {
+        console.log("ccc", ev);
+      };
+      function addListeners(xhr) {
+        // xhr.addEventListener("loadstart", handleEvent);
+        // xhr.addEventListener("load", handleEvent);
+        // xhr.addEventListener("loadend", handleEvent);
+        xhr.addEventListener("progress", handleEvent);
+        // xhr.addEventListener("error", handleEvent);
+        // xhr.addEventListener("abort", handleEvent);
+      }
+      let http = new XMLHttpRequest();
+      addListeners(http);
+      http.open(
+        "POST",
+        "https://uat-operation-gt.pubmi.cn/operation/productAndChannel?channelSort=1"
+      );
+      // http.setRequestHeader("Content-Type", "text/plain");  设置了请求头部的数据格式没效果
+      http.responseType = "json"; //设置返回的response类型是json
+      http.withCredentials = false;
+      // http.setRequestHeader("Access-Control-Allow-Origin", "*");  这是跨域的设置，一般是后台设置
+      http.send();
+      http.onreadystatechange = function () {
+        // console.log(XMLHttpRequest.DONE);
+        console.log("http", http);
+        let arr = http.getAllResponseHeaders();
+        // http.onprogress = function (ev) {
+        //   console.log("dddd", ev);
+        // };
+        // http.addEventListener("progress", handleEvent);
+        // console.log("arr", arr);
+      };
+      //   http.abort();
+      //   http.error();
+      // setTimeout(function () {
+      //   http.abort();
+      // }, 500);
+    </script>
+  </body>
+</html>

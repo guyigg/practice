@@ -25,7 +25,7 @@
                     但是如果是下面情况还是字符串拼接,因为从语法分析来讲对象参与运算了，就会先把对象转成字符串
                         （{}+10）-> '[object object]10'
                         let x = {} + 10;  x -> '[object object]10'
-        */
+      */
       console.log({} + m); //[object object]10
       let res = {} + m;
       console.log(res); //[object object]10

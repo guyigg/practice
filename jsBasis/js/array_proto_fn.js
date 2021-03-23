@@ -44,3 +44,18 @@ Array.prototype.my_reduce_1 = function(callback, initValue){
     }
     return initValue
 }
+
+Array.prototype.my_reduce_2 = function(callback, initialValue){
+    if(typeof callback !== 'function') throw new TypeError( callback + 'is not a function')
+    var self = this,
+        len = self.length,
+        index = 0;
+    if(typeof initialValue === 'undefined'){
+        initialValue = self[0];
+        index = 1;
+    }
+    for(let i=index; i<len; i++){
+        initialValue = callback(initialValue, self[i], i, self)
+    }
+    return initialValue;
+}

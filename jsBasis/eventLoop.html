@@ -1,12 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <script src="./js/promise.js"></script>
-</head>
-<body>
-    
-</body>
+    <!-- <script src="./js/promise_my.js"></script> -->
+    <!-- <script src="./js/iterator.js"></script> -->
+    <script src="./js/generator.js"></script>
+  </head>
+  <body>
+    <div></div>
+    <script>
+      let str = "ababababa",
+        target = "ab";
+      function handle1(str, target) {
+        let x = 0,
+          len1 = str.length,
+          len2 = target.length;
+        for (let i = 0; i < len1; i++) {
+          if (target === str.slice(i, i + len2)) {
+            x++;
+          }
+        }
+        for (let i = len1 - 1; i >= 0; i--) {
+          strx = str.slice(i - len2, i);
+          if (target === str.slice(i, i + len2)) {
+            x++;
+          }
+        }
+        console.log("x1", x);
+        return x;
+      }
+
+      function handle2(str, target) {
+        let x = 0,
+          len1 = str.length - 1,
+          len2 = target.length,
+          strx = "";
+        for (let i = len1; i >= 0; i--) {
+          strx = str.slice(i - len2, i);
+          if (target === str.slice(i, i + len2)) {
+            x++;
+          }
+        }
+        console.log("x1", x);
+        return x;
+      }
+      handle1(str, target);
+      //===========测试
+      /* var p1 = new Promise(function (resolve, reject) {
+    resolve('OK');
+}).then(function (result) {
+    console.log('成功', result);
+    return a;
+}).then(function (result) {
+    console.log('成功', result);
+}).catch(function (reason) {
+    console.log('失败', reason);
+}); */
+
+      /* const query = interval => {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            if (interval === 1000) reject(interval);
+            resolve(interval);
+        }, interval);
+    });
+};
+
+var p = Promise.all([query(3000), query(1000), query(2000), 4000]);
+p.then(function (results) {
+    console.log('成功', results);
+}).catch(function (reason) {
+    console.log('失败', reason);
+}); */
+    </script>
+  </body>
 </html>

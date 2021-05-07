@@ -89,7 +89,6 @@ Function.prototype.mybind = function mybind(context){
         return self.apply(context, params)
     }
 }
-
 Function.prototype.mycall = function mycall(context){
     context == null ? context = window : null;
     if(!/^(object|function)$/i.test(typeof context)) context = Object(context)
@@ -97,14 +96,14 @@ Function.prototype.mycall = function mycall(context){
         params = [].slice.call(arguments,1),
         key = Symbol('KEY'),
         result;
-    context[key] = self
-    result = context[key](...params)
+    context[key] = self; 
+    result = context[key](...params) 
     delete context[key]
     return result
 }
 Function.prototype.myapply = function myapply(context, arr){
     context == null ? context = window : null;
-    if(!Array.isArray(arr)) throw TypeError( arr + ' must be a Array!')
+    if(!Array.(arr)) throw TypeError( arr + ' must be a Array!')
     if(!/^(object|function)$/i.test(typeof context)) context = Object(context)
     let self = this,
         key = Symbol('KEY'),
@@ -116,14 +115,67 @@ Function.prototype.myapply = function myapply(context, arr){
 }
 
 let obj = {name:13}
+function fn1(){
+    console.log(this)
+}
 function fn(x,y){
     // console.log('fn',this)
     // console.log(x,y)
 }
 
-fn.mycall(null,10,20)
-fn.myapply(null,[10,20])
+// fn.mycall(fn1,10,20)
+// fn.myapply(null,[10,20])
 
+//对于下面的面试题详细解析注释my_call方法
+Function.prototype.my_call = function my_call(context){
+    /**
+     * B.my_call.my_call.my_call.my_call(A, 20, 10)
+     * 以下call就代表my_call方法
+     * 上面的调用从左到右相当于B.call属性方法中再调用call属性方法中再调用call... => 最后始终是call.call(A,20,10)执行
+     * 执行call.call(A,20,10)
+     * 第一次：进入方法内部，this => call方法; context => A方法
+     * 第二次：进入call, this => A方法；context => 20，经过Object(20)处理成Number(20)对象
+     */
+    context = context || window;
+    if(!/^(object|function)$/i.test(typeof context)) context = Object(context)
+    var self = this,
+        key = Symbol('KEY'),
+        params = [...arguments].slice(1),
+        result = null;
+    /**
+     * context[key] = self; 
+     * 第一次：相当于在A方法上添加一个属性key，值为call方法。 => A[key] = call
+     * 第二次：就是在Number(20)对象上添加一个属性key,值为A方法。=> Number(20)[key] = A
+     */
+    context[key] = self;
+    /**
+     * context[key](...params);
+     * 第一次：执行A[key](...params) => A.call(20,10) 这里就会再次执行call方法,并且点前面是A对象
+     * 第二次：执行Number(20)[key](...params) => Number(20).A(10) 这里就相当于执行A方法了，是Number(20)调用的A方法，Number(20)对象上面没有name属性
+     * function A(x,y){
+     *  x = 10, y = undefined
+     *  var res = x + y => 10 + undefined
+     *  console.log(res, this.name)
+     * }
+     */
+    result = context[key](...params);
+    delete context[key]
+    return result;
+    
+}
+
+Function.prototype._call = function _call(context){
+    context = context || window;
+    if(!/^(object|function)$/i.test(typeof context)) context = Object(context);
+    let self = this,
+        key = Symbol('KEY'),
+        params = [...arguments].slice(1),
+        result = null;
+    context[key] = self;
+    result = context[key](...params);
+    delete context[key];
+    return result;
+  }
 /**
  * 面试题
  */
@@ -136,7 +188,15 @@ function B(x,y){
     var res = x - y
     console.log(res, this.name)
 }
-B.call(A, 40, 30) //res=10, A
-B.call.call.call(A, 20, 10) // res NaN, undefined
-Function.prototype.call(A, 60, 50) //
-Function.prototype.call.call.call(A, 80, 70) //res NaN udefined
+//B.call(A, 40, 30) //res=>10, A
+//B.call.call.call(A, 20, 10) // res=>NaN, undefined
+//Function.prototype.call(A, 60, 50) //
+//Function.prototype.call.call.call(A, 80, 70) //res=>NaN udefined
+
+B._call(A, 40, 30) //res=>10, A
+B.myapply(A, [40, 30]) //res=>10, A
+B.my_call.my_call.my_call.my_call(A, 20, 10) // res=>NaN, undefined
+B.my_call.my_call.my_call.my_call(A, 20, 10, 20) // res=>30, undefined
+//Function.prototype.my_call(A, 60, 50) //
+//Function.prototype.my_call.my_call.my_call(A, 80, 70) //res=>NaN udefined
+

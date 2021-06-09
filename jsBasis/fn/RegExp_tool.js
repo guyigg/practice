@@ -70,5 +70,6 @@ console.log(timestr)
 let num = "12345678"
 console.log(num.millimeter())
 let a = str.replace(/-/g, "/")
-console.log(a)
+console.log('ffff',a)
+
 }()
